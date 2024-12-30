@@ -1,0 +1,7 @@
+streamlit
+pandas
+langchain-core 
+langchain-mistralai 
+pypdf
+pydantic
+langchain-community
