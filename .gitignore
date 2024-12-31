@@ -1,2 +1,5 @@
 .env
 docs/
+serviceAccountKey.json
+client_secrets.json
+z.txt
