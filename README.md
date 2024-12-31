@@ -22,3 +22,4 @@
 - **PyPDF**: For parsing and extracting data from PDF CV files.
 - **Pydantic**: For data validation and parsing.
 - **Pandas**: For data manipulation and extraction.
+- **Firebase Authentication**: For login with email and password and get token, built-in forget password and verify account.
