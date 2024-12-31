@@ -1,5 +1,9 @@
+# File
 .env
-docs/
 serviceAccountKey.json
 client_secrets.json
-z.txt
+
+# Folder
+__pycache__/
+docs/
+.streamlit/

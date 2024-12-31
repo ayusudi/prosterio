@@ -1,37 +1,137 @@
 import streamlit as st
+import auth_functions
+from streamlit_extras.app_logo import add_logo
 
-if "page" not in st.session_state:
-    st.session_state.page = ""
+# -------------------------------------------------------------------------------------------------
+# Not logged in
+# -------------------------------------------------------------------------------------------------
+if 'user_info' not in st.session_state:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        # Display logo and app description
+        st.markdown("""
+        <div style="display: flex; align-items: center; margin: 20px 0; justify-content: space-between;">
+            <img src="https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/logo.png" alt="Logo" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+            <div style="width:175px">
+                <p style="font-weight:bold; font-size:32px; font-family: 'Nunito', sans-serif; margin: 0">Prosterio</p>
+                <p style="font-size:15px; margin: 0; font-family: 'Nunito', sans-serif; color: gray;">Streamline Tech Talent </br>for Project Managers</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-PAGE = [None, "Dashboard", "PM Assistant", "Add IT Talent", ]
+        # Authentication form layout
+        do_you_have_an_account = col2.selectbox(
+            label='Do you have Prosperio Account?',
+            options=('Yes', 'No', 'Yes, but I forgot my password')
+        )
+        auth_form = col2.form(key='Authentication form', clear_on_submit=False)
+        email = auth_form.text_input(label='Email')
+        password = auth_form.text_input(label='Password', type='password') if do_you_have_an_account in {'Yes', 'No'} else auth_form.empty()
+        auth_notification = col2.empty()
 
-def login():
-    st.header("Log in")
-    if st.button("Log in"):
-        st.session_state.page = "Dashboard"
-        print(st.session_state.page)
+        # Sign In
+        if do_you_have_an_account == 'Yes' and auth_form.form_submit_button(label='Sign In', use_container_width=True, type='primary'):
+            with auth_notification, st.spinner('Signing in'):
+                auth_functions.sign_in(email, password)
+
+        # Create Account
+        elif do_you_have_an_account == 'No' and auth_form.form_submit_button(label='Create Account', use_container_width=True, type='primary'):
+            with auth_notification, st.spinner('Creating account'):
+                auth_functions.create_account(email, password)
+
+        # Password Reset
+        elif do_you_have_an_account == 'Yes, but I forgot my password' and auth_form.form_submit_button(label='Send Password Reset Email', use_container_width=True, type='primary'):
+            with auth_notification, st.spinner('Sending password reset link'):
+                auth_functions.reset_password(email)
+
+        # Authentication success and warning messages
+        if 'auth_success' in st.session_state:
+            auth_notification.success(st.session_state.auth_success)
+            del st.session_state.auth_success
+        elif 'auth_warning' in st.session_state:
+            auth_notification.warning(st.session_state.auth_warning)
+            del st.session_state.auth_warning
+
+# -------------------------------------------------------------------------------------------------
+# Logged in
+# -------------------------------------------------------------------------------------------------
+else:
+    # Sidebar Navigation
+    # Render the sidebar content at the top
+    # st.sidebar._is_top_level = True
+
+    # Define navigation pages
+    st.markdown(
+        """
+        <style>
+            [data-testid="stSidebarNav"] {
+                background-image: url(https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/sidebarlogo.png);
+                background-size: 310px 150px;
+                background-repeat: no-repeat;
+                padding-top: 168px;
+                background-position: 15px 0px;
+                height: 210px;
+            }
+            # [data-testid="stSidebarNav"]::before {
+            #     content: "My Company Name";
+            #     margin-left: 20px;
+            #     margin-top: 20px;
+            #     font-size: 30px;
+            #     position: relative;
+            #     top: 100px;
+            # }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    def logout():
+        auth_functions.sign_out()
+        st.session_state.pop('user_info', None)
+        pg = st.navigation([st.Page("demo.py", title="Video Demo")], position="hidden"  )
+        pg.run()
         st.rerun()
 
-def logout():
-    st.session_state.page = None
-    st.rerun()
 
-page = st.session_state.page
-logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
-dashboard_page = st.Page("dashboard.py", title="Dashboard", icon=":material/dashboard:")
-chat_page = st.Page("chat.py", title="PM Assistant", icon=":material/chat:")
-add_talent_page = st.Page("add_talent.py", title="Add IT Talent", icon=":material/person_add:")
+    # add_logo("https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/logo.png", width=100)
+    dashboard_page = st.Page("dashboard.py", title="Dashboard", icon=":material/dashboard:")
+    chat_page = st.Page("chat.py", title="PM Assistant", icon=":material/chat:")
+    add_talent_page = st.Page("add_talent.py", title="Add IT Talent", icon=":material/person_add:")
+    settings_page = st.Page("settings.py", title="Settings", icon=":material/settings:")
+    logout = st.Page(logout, title="Log out", icon=":material/logout:")
+    pg = st.navigation([dashboard_page, chat_page, add_talent_page, settings_page, logout], position='sidebar', expanded=True)
+    pg.run()
+    # ({"label" : [dashboard_page, chat_page, add_talent_page]}, position='sidebar', expanded=True)
+    # pg.run()
+    # st.sidebar.radio(label="",options=["Dashboard", "PM Assistant", "Add IT Talent", "Log Out"])
+        # [st.Page(print("hai"), title="Log out", icon=":material/logout:"), "PM Assistant", "Add IT Talent", "Log Out"]
+        # )
+    # st.sidebar.image("https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/logo.png", width=100)
+    # st.sidebar.title("Prosterio")
+    # page = st.sidebar.selectbox("Choose a Page:", ["Dashboard", "PM Assistant", "Add IT Talent", "Log Out"])
 
+    # Navigation logic
+    # if page == "Dashboard":
+    #     st.title("Dashboard")
+    #     st.write("Welcome to the Dashboard!")
+    # elif page == "PM Assistant":
+    #     st.title("PM Assistant")
+    #     st.write("Here you can interact with the assistant.")
+    # elif page == "Add IT Talent":
+    #     st.title("Add IT Talent")
+    #     st.write("Add new IT talents here.")
+    # elif page == "Log Out":
+    #     # Clear session and rerun
+    #     st.session_state.pop('user_info', None)
+    #     st.experimental_rerun()
+    # st.header('User information:')
+    # st.write(st.session_state.user_info)
 
-st.title("Prosterio")
+    # # Sign out
+    # st.header('Sign out:')
+    # st.button(label='Sign Out', on_click=auth_functions.sign_out, type='primary')
 
-# st.logo("images/horizontal_blue.png", icon_image="images/icon_blue.png")
-
-page_dict = {}
-
-if st.session_state.page == None or st.session_state.page == "":
-  pg = st.navigation([st.Page(login, title="Login")])
-else:
-  pg = st.navigation([dashboard_page, chat_page, add_talent_page, logout_page])
-
-pg.run()
+    # # Delete Account
+    # st.header('Delete account:')
+    # password = st.text_input(label='Confirm your password', type='password')
+    # st.button(label='Delete Account', on_click=auth_functions.delete_account, args=[password], type='primary')

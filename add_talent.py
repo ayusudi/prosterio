@@ -1,4 +1,4 @@
 import streamlit as st
 
 st.header("Add IT Talent")
-st.write(f"You in page {st.session_state.page}.")
+st.write(f"You in page Add IT Talent.")

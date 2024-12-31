@@ -1,7 +1,8 @@
-streamlit
-pandas
-langchain-core 
-langchain-mistralai 
-pypdf
-pydantic
-langchain-community
+langchain-community==0.3.13
+langchain-core==0.3.28
+langchain-mistralai==0.2.4
+pandas==2.2.3
+pydantic==2.10.4
+pypdf==5.1.0
+requests==2.31.0
+streamlit==1.41.0
