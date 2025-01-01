@@ -51,7 +51,7 @@ if 'user_info' not in st.session_state:
         elif 'auth_warning' in st.session_state:
             auth_notification.warning(st.session_state.auth_warning)
             del st.session_state.auth_warning
-
+   
 # -------------------------------------------------------------------------------------------------
 # Logged in
 # -------------------------------------------------------------------------------------------------
@@ -88,50 +88,16 @@ else:
     def logout():
         auth_functions.sign_out()
         st.session_state.pop('user_info', None)
-        pg = st.navigation([st.Page("demo.py", title="Video Demo")], position="hidden"  )
+        pg = st.navigation([st.Page("./pages/demo.py", title="Video Demo")], position="hidden"  )
         pg.run()
         st.rerun()
 
 
     # add_logo("https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/logo.png", width=100)
-    dashboard_page = st.Page("dashboard.py", title="Dashboard", icon=":material/dashboard:")
-    chat_page = st.Page("chat.py", title="PM Assistant", icon=":material/chat:")
-    add_talent_page = st.Page("add_talent.py", title="Add IT Talent", icon=":material/person_add:")
-    settings_page = st.Page("settings.py", title="Settings", icon=":material/settings:")
+    dashboard_page = st.Page("./pages/dashboard.py", title="Dashboard", icon=":material/dashboard:")
+    chat_page = st.Page("./pages/chat.py", title="PM Assistant", icon=":material/chat:")
+    add_talent_page = st.Page("./pages/add_talent.py", title="Add IT Talent", icon=":material/person_add:")
+    settings_page = st.Page("./pages/settings.py", title="Settings", icon=":material/settings:")
     logout = st.Page(logout, title="Log out", icon=":material/logout:")
     pg = st.navigation([dashboard_page, chat_page, add_talent_page, settings_page, logout], position='sidebar', expanded=True)
     pg.run()
-    # ({"label" : [dashboard_page, chat_page, add_talent_page]}, position='sidebar', expanded=True)
-    # pg.run()
-    # st.sidebar.radio(label="",options=["Dashboard", "PM Assistant", "Add IT Talent", "Log Out"])
-        # [st.Page(print("hai"), title="Log out", icon=":material/logout:"), "PM Assistant", "Add IT Talent", "Log Out"]
-        # )
-    # st.sidebar.image("https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/logo.png", width=100)
-    # st.sidebar.title("Prosterio")
-    # page = st.sidebar.selectbox("Choose a Page:", ["Dashboard", "PM Assistant", "Add IT Talent", "Log Out"])
-
-    # Navigation logic
-    # if page == "Dashboard":
-    #     st.title("Dashboard")
-    #     st.write("Welcome to the Dashboard!")
-    # elif page == "PM Assistant":
-    #     st.title("PM Assistant")
-    #     st.write("Here you can interact with the assistant.")
-    # elif page == "Add IT Talent":
-    #     st.title("Add IT Talent")
-    #     st.write("Add new IT talents here.")
-    # elif page == "Log Out":
-    #     # Clear session and rerun
-    #     st.session_state.pop('user_info', None)
-    #     st.experimental_rerun()
-    # st.header('User information:')
-    # st.write(st.session_state.user_info)
-
-    # # Sign out
-    # st.header('Sign out:')
-    # st.button(label='Sign Out', on_click=auth_functions.sign_out, type='primary')
-
-    # # Delete Account
-    # st.header('Delete account:')
-    # password = st.text_input(label='Confirm your password', type='password')
-    # st.button(label='Delete Account', on_click=auth_functions.delete_account, args=[password], type='primary')
