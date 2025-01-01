@@ -1,5 +1,5 @@
 import streamlit as st
-import auth_functions
+import functions.auth_functions as auth_functions
 
 st.markdown("<div style='border-bottom:1px solid grey'><h2 style='padding:10px 0'>Settings</h2></div><br/>", unsafe_allow_html=True)
 

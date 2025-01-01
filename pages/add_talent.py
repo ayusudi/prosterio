@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field
 from langchain_community.document_loaders import PyPDFLoader
 from typing import List
 import ssl
-from chunks import compile_to_chunk
-from connection import insert_employee, bulk_insert_to_sql
+from functions.chunks import compile_to_chunk
+from functions.connection import insert_employee, bulk_insert_to_sql
 import streamlit.components.v1 as components
 
 st.header("Add IT Talent")
@@ -127,6 +127,3 @@ window.addEventListener('load', function() {
     
 </script>
 """)
-# Handle the result in Python
-if result:
-    st.write(f"Message received: {result}")
