@@ -1,6 +1,15 @@
 import json
 import requests
 import streamlit as st
+import os
+from fnmatch import fnmatch
+
+def remove_filesPDF():
+    print("Removing PDF files")
+    for dirpath, dirnames, filenames in os.walk(os.curdir):
+        for file in filenames:
+            if fnmatch(file, '*.pdf'):
+                os.remove(os.path.join(dirpath, file))
 
 ## -------------------------------------------------------------------------------------------------
 ## Firebase Auth API -------------------------------------------------------------------------------
@@ -12,6 +21,7 @@ def sign_in_with_email_and_password(email, password):
     data = json.dumps({"email": email, "password": password, "returnSecureToken": True})
     request_object = requests.post(request_ref, headers=headers, data=data)
     raise_detailed_error(request_object)
+    remove_filesPDF()
     return request_object.json()
 
 def get_account_info(id_token):
@@ -101,7 +111,6 @@ def create_account(email:str, password:str) -> None:
     try:
         # Create account (and save id_token)
         id_token = create_user_with_email_and_password(email,password)['idToken']
-        print(id_token, "<----")
         # Create account and send email verification
         send_email_verification(id_token)
         st.session_state.auth_success = 'Check your inbox to verify your email'
@@ -138,6 +147,7 @@ def reset_password(email:str) -> None:
 
 def sign_out() -> None:
     st.session_state.clear()
+    remove_filesPDF()
     st.session_state.auth_success = 'You have successfully signed out'
 
 

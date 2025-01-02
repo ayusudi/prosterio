@@ -7,7 +7,7 @@ from streamlit_extras.app_logo import add_logo
 # -------------------------------------------------------------------------------------------------
 if 'user_info' not in st.session_state:
     col1, col2, col3 = st.columns([1, 2, 1])
-    st.navigation([st.Page('./pages/demo.py', title="hai")],position='hidden', expanded=False,)
+    st.navigation([st.Page('./pages/demo.py', title="Prosterio")],position='hidden', expanded=False,)
     with col2:
         # Display logo and app description
         st.markdown("""
