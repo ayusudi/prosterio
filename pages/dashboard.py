@@ -58,7 +58,7 @@ if st.checkbox("Show IT Talents Table"):
     for col, field_name in zip(columns, fields):
         col.write(field_name)
 
-    for row in data:
+    for i, row in enumerate(data):
         col1, col2, col3, col4 = st.columns((2,2,2,1))
         col1.write(row['Name'])
         col2.write(row['Role'])
@@ -66,7 +66,7 @@ if st.checkbox("Show IT Talents Table"):
         button_type = "None" if row["CV"] else "CV"
         if row["CV"] is not None:
             button_hold = col4.empty()
-            do_action = button_hold.button("View CV", key=row['Name'])
+            do_action = button_hold.button("View CV", key=f"{i}-{row['Name']}")
             if do_action:
                 display_pdf_from_binary(row["CV"])
         else:
