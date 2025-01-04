@@ -7,22 +7,21 @@ from langchain_community.document_loaders import PyPDFLoader
 from typing import List
 import ssl
 from functions.chunks import compile_to_chunk
-from functions.connection import insert_employee, bulk_insert_to_sql
+from functions.connection import insert_employee, bulk_insert_to_sql, set_data_file
 import streamlit.components.v1 as components
 
 st.header("Add IT Talent")
 
 def add_talent_to_db(data, uploaded_file: BytesIO):
-    try:
-      pm_email = st.session_state.user_info["email"]
-      employee_id = insert_employee(data["full_name"], data["github_username"], data["email"], data["title"], pm_email, uploaded_file.name)
-      chunks = compile_to_chunk(data, employee_id, pm_email)
-      bulk_insert_to_sql(chunks, data["full_name"])
-      st.write(f"Successfully added {data['full_name']} to My IT Talent")
-      return data
-    except Exception as e:
-      print(e)
-
+  try:
+    pm_email = st.session_state.user_info["email"]
+    employee_id = insert_employee(data["full_name"], data["email"], data["title"], pm_email, uploaded_file.name)
+    chunks = compile_to_chunk(data, employee_id, pm_email)
+    bulk_insert_to_sql(chunks, data["full_name"])
+    st.write(f"Successfully added {data['full_name']} to My IT Talent")
+    return data
+  except Exception as e:
+    print(e)
 
 def main():
   # Upload PDF via Streamlit file uploader
@@ -51,8 +50,7 @@ def main():
       class CVDataExtraction(BaseModel):
         full_name: str = Field(description="The full name of the candidate, used as their username in the system.")
         email: str = Field(description="The candidate's email address for identification and communication purposes.")
-        github_username: str = Field(description="The candidate's github username or - if not available.")
-        title: str = Field(description="The candidate's job title or role, indicating their professional position.")
+        title: str = Field(description="The candidate's main title.")
         job_titles: str = Field(description="A summary of the candidate's current or most recent job titles.")
         promotion_years: int = Field(description="The year the candidate started their professional career.")
         profile: str = Field(description="A brief overview of the candidate's professional profile, including their key attributes and expertise.")
