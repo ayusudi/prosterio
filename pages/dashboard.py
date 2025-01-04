@@ -4,17 +4,19 @@ from PyPDF2 import PdfReader
 from functions.connection import list_employees
 import pandas as pd
 import matplotlib.pyplot as plt
+import base64
 
 st.header("Dashboard")
 
 employees = list_employees()
 
-def display_pdf(pdf_data):
-    # Create a temporary PDF file from binary
-    pdf_file = BytesIO(pdf_data)
-    reader = PdfReader(pdf_file)
-    for page in reader.pages:
-        st.write(page.extract_text())
+def display_pdf_from_binary(binary_data):
+    """Display a PDF from binary data using iframe in Streamlit."""
+    # Encode binary data to base64
+    base64_pdf = base64.b64encode(binary_data).decode('utf-8')
+    # Create an iframe for the PDF preview
+    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
+    st.markdown(pdf_display, unsafe_allow_html=True)
 
 # Display total employees
 total_employees = len(employees)
@@ -66,6 +68,6 @@ if st.checkbox("Show IT Talents Table"):
             button_hold = col4.empty()
             do_action = button_hold.button("View CV", key=row['Name'])
             if do_action:
-                display_pdf(row["CV"])
+                display_pdf_from_binary(row["CV"])
         else:
             col4.write("None")
