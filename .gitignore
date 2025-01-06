@@ -2,8 +2,8 @@
 .env
 serviceAccountKey.json
 client_secrets.json
+.streamlit/secrets.toml
 
 # Folder
 __pycache__/
 docs/
-.streamlit/
