@@ -34,7 +34,7 @@ with col1:
 
 # Detect model change and clear chat history if model has changed
 model_option = "mixtral-8x7b-32768"
-max_tokens_range = models["tokens"]
+max_tokens_range = models[0]["tokens"]
 
 with col2:
     # Adjust max_tokens slider dynamically based on the selected model

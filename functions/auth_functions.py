@@ -3,6 +3,7 @@ import requests
 import streamlit as st
 import os
 from fnmatch import fnmatch
+from functions.connection import destroy
 
 
 def remove_filesPDF():
@@ -183,13 +184,15 @@ def sign_out() -> None:
 
 def delete_account(password: str) -> None:
     try:
+        email = st.session_state.user_info["email"]
         # Confirm email and password by signing in (and save id_token)
-        id_token = sign_in_with_email_and_password(
-            st.session_state.user_info["email"], password
-        )["idToken"]
+        id_token = sign_in_with_email_and_password(email=email, password=password)[
+            "idToken"
+        ]
 
         # Attempt to delete account
         delete_user_account(id_token)
+        destroy(email)
         st.session_state.clear()
         st.session_state.auth_success = "You have successfully deleted your account"
 

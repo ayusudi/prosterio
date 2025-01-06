@@ -12,10 +12,22 @@ conn = snowflake.connector.connect(
 )
 
 
-def list_employees():
+def destroy(pm_email):
     try:
-        sql = "SELECT FULL_NAME, EMAIL, ROLE, FILE_DATA FROM EMPLOYEES;"
-        result = conn.cursor().execute(sql)
+        sql = "DELETE FROM CONTENT_CHUNKS WHERE PM_EMAIL = %s;"
+        conn.cursor().execute(sql, (pm_email))
+        sql = "DELETE FROM EMPLOYEES WHERE PM_EMAIL = %s;"
+        result = conn.cursor().execute(sql, (pm_email))
+        return result
+    except Exception as e:
+        print(e)
+        st.error(f"Sorry we are not able to delete the data from the database.")
+
+
+def list_employees(email):
+    try:
+        sql = "SELECT FULL_NAME, EMAIL, ROLE, FILE_DATA FROM EMPLOYEES WHERE PM_EMAIL = %s;"
+        result = conn.cursor().execute(sql, (email))
         result = result.fetchall()
         return result
     except Exception as e:

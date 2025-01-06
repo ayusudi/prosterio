@@ -9,7 +9,7 @@ from functions.header import header
 
 header("📊", "Dashboard")
 
-employees = list_employees()
+employees = list_employees(st.session_state.user_info["email"])
 
 
 def display_pdf_from_binary(binary_data):
@@ -37,15 +37,17 @@ df = pd.DataFrame(data)
 
 # Toggle for Role Distribution
 if st.checkbox("Show Role Distribution"):
-    st.subheader("Role Distribution")
-    role_counts = df["Role"].value_counts()  # Correctly count roles
-    fig, ax = plt.subplots()
-    role_counts.plot(kind="bar", color="skyblue", ax=ax)
-    ax.set_title("Count of Members by Role")
-    ax.set_xlabel("Role")
-    ax.set_ylabel("Count")
-    st.pyplot(fig)
-
+    if len(data) > 0:
+        st.subheader("Role Distribution")
+        role_counts = df["Role"].value_counts()  # Correctly count roles
+        fig, ax = plt.subplots()
+        role_counts.plot(kind="bar", color="skyblue", ax=ax)
+        ax.set_title("Count of Members by Role")
+        ax.set_xlabel("Role")
+        ax.set_ylabel("Count")
+        st.pyplot(fig)
+    else:
+        st.write("No data available")
 # Toggle for IT Talents Table
 if st.checkbox("Show IT Talents Table"):
     st.write("## My IT Talents")
