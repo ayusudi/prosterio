@@ -1,6 +1,12 @@
 import streamlit as st
 import functions.auth_functions as auth_functions
-from streamlit_extras.app_logo import add_logo
+from PIL import Image
+
+logo = Image.open("logo.ico")
+st.set_page_config(
+    page_title="Prosterio",
+    page_icon=logo,
+)
 
 # -------------------------------------------------------------------------------------------------
 # Not logged in
@@ -109,7 +115,6 @@ else:
         pg.run()
         st.rerun()
 
-    # add_logo("https://raw.githubusercontent.com/ayusudi/prosterio/refs/heads/main/logo.png", width=100)
     dashboard_page = st.Page(
         "./pages/dashboard.py", title="Dashboard", icon=":material/dashboard:"
     )
