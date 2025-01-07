@@ -1,6 +1,4 @@
 import streamlit as st
-from io import BytesIO
-from PyPDF2 import PdfReader
 from functions.connection import list_employees
 import pandas as pd
 import matplotlib.pyplot as plt

@@ -1,6 +1,5 @@
 import streamlit as st
 import snowflake.connector
-from datetime import datetime
 
 conn = snowflake.connector.connect(
     user=st.secrets["snowflake_user"],
