@@ -13,8 +13,7 @@
    Extracts relevant information from PDF CVs and compiles it into a structured JSON format. [Implemented in extract_cv.py](./functions/extract_cv.py)
 
 2. Chunking:
-   Breaks down extracted CV data into chunks and stores embeddings in Snowflake to enhance search and matching capabilities.
-   Chunking logic is implemented in [chunks.py](./functions/chunks.py).
+   Breaks down extracted CV data into chunks and stores embeddings in Snowflake to enhance search and matching capabilities. Implemented chunk with Langchain with Mistral from [extract_cv.py](./functions/extract_cv.py) to [chunks.py](./functions/chunks.py).
 
 3. Retrieval-Augmented Generation (RAG) Implementation:
    Provides accurate developer-project matches using RAG with Snowflake and the Mistral model. The first implementation with vector search but now is already **implemented cortex search**.
