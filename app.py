@@ -85,11 +85,6 @@ if "user_info" not in st.session_state:
 # Logged in
 # -------------------------------------------------------------------------------------------------
 else:
-    # Sidebar Navigation
-    # Render the sidebar content at the top
-    # st.sidebar._is_top_level = True
-
-    # Define navigation pages
     st.markdown(
         """
         <style>

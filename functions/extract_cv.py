@@ -31,9 +31,6 @@ def extract_cv(uploaded_files):
             job_titles: str = Field(
                 description="A summary of the candidate's current or most recent job titles."
             )
-            promotion_years: int = Field(
-                description="The year the candidate started their professional career."
-            )
             profile: str = Field(
                 description="A brief overview of the candidate's professional profile, including their key attributes and expertise."
             )

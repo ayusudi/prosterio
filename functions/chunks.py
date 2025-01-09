@@ -5,7 +5,6 @@ def compile_to_chunk(data: Dict, id: int, pm_email: str) -> List[str]:
     full_name = data["full_name"]
     title = data["title"]
     profile = data["profile"]
-    promotion_year = data["promotion_years"]
     professional_experiences = data["professional_experiences"]
     educations = data["educations"]
     skills = data["skills"]
@@ -29,7 +28,7 @@ def compile_to_chunk(data: Dict, id: int, pm_email: str) -> List[str]:
         "information",
         f"""
 title: {title}
-professionalSummary: I had started my professional career since {promotion_year}. {profile}
+summary: {profile}
 """,
     )
 

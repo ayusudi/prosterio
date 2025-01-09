@@ -1,3 +1,6 @@
+# IMPORTANT NOTES ===================================
+# Not used since I migrated to implement Cortex Search.
+
 import streamlit as st
 import snowflake.connector
 
@@ -9,7 +12,6 @@ conn = snowflake.connector.connect(
     database=st.secrets["snowflake_database"],
     schema=st.secrets["snowflake_schema"],
 )
-
 
 def chatPromptRAG(question: str, pm_email: str):
     try:
