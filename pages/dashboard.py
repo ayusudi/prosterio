@@ -14,7 +14,7 @@ def display_pdf_from_binary(binary_data):
     # Encode binary data to base64
     base64_pdf = base64.b64encode(binary_data).decode("utf-8")
     # Create an iframe for the PDF preview
-    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></embed>'
+    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 # Display total employees
