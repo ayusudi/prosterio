@@ -9,15 +9,13 @@ header("📊", "Dashboard")
 
 employees = list_employees(st.session_state.user_info["email"])
 
-
 def display_pdf_from_binary(binary_data):
     """Display a PDF from binary data using iframe in Streamlit."""
     # Encode binary data to base64
     base64_pdf = base64.b64encode(binary_data).decode("utf-8")
     # Create an iframe for the PDF preview
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></iframe>'
+    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="500" type="application/pdf"></embed>'
     st.markdown(pdf_display, unsafe_allow_html=True)
-
 
 # Display total employees
 total_employees = len(employees)
