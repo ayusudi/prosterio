@@ -11,7 +11,7 @@ if "messages" not in st.session_state or st.session_state.messages is None:
 
 # Layout for model selection and max_tokens slider
 col1, col2 = st.columns((3, 2))
-col1.info(f"Trigger our Posterio RAG as a PM Assistant by starting a chat with **/RAG** then continue with your prompt.\n\n**/RAG** I'm planning an inventory management system. What key skills should my developer have?")
+col1.info(f"Trigger our Posterio RAG as a PM Assistant by starting a chat with **/RAG** then continue with your prompt.\n\n**/RAG** I'm planning to build an inventory management system. Who would you recommend from our IT talent to develop this app?")
 
 with col2:
     max_tokens = col2.slider(

@@ -40,7 +40,7 @@ def insert_employee(full_name, email, role, pm_email, file_path):
             file_data = file.read()
 
         # SQL query with parameter placeholders
-        sql = f"INSERT INTO HELP_PM.PUBLIC.EMPLOYEES (FULL_NAME, EMAIL, ROLE, PM_EMAIL, FILE_DATA) VALUES (%s, %s, %s, %s, %s);"
+        sql = f"INSERT INTO EMPLOYEES (FULL_NAME, EMAIL, ROLE, PM_EMAIL, FILE_DATA) VALUES (%s, %s, %s, %s, %s);"
 
         # Execute the query with parameters
         conn.cursor().execute(sql, (full_name, email, role, pm_email, file_data))
@@ -55,30 +55,24 @@ def insert_employee(full_name, email, role, pm_email, file_path):
 
 def bulk_insert_to_sql(data):
     try:
-        # Define the base SQL query
-        base_query = "INSERT INTO CONTENT_CHUNKS (CHUNK_TEXT, NAME, PM_EMAIL, USERID, REF) VALUES "
-
-        # Initialize a list to hold the value tuples
         values_list = []
-
-        # Loop through the list of dictionaries and extract the values
         for record in data:
-            chunk_text = record["CHUNK_TEXT"]
-            name = record["NAME"]
-            pm_email = record["PM_EMAIL"]
-            user_id = record["USERID"]
-            ref = record["REF"]
+            try:
+                chunk_text = record["CHUNK_TEXT"].replace("'", "\u0027")
+                name = record["NAME"].replace("'", "\u0027")
+                pm_email = record["PM_EMAIL"].replace("'", "\u0027")
+                user_id = record["USERID"]
+                ref = record["REF"]
+                values_list.append([chunk_text, name, pm_email, user_id, ref])
+            except Exception as e:
+                print(f"Error with record: {record} - {e}")
 
-            # Add the formatted values to the values list
-            values_list.append(
-                f"('{chunk_text}', '{name}', '{pm_email}', {user_id}, {ref})"
-            )
-
-        # Combine the base query with all the value tuples
-        final_query = base_query + ", ".join(values_list) + ";"
-        result = conn.cursor().execute(final_query)
-        return result
+        base_query = "INSERT INTO CONTENT_CHUNKS (CHUNK_TEXT, NAME, PM_EMAIL, USERID, REF) VALUES (%s, %s, %s, %s, %s);"
+        cursor = conn.cursor()
+        cursor.executemany(base_query, values_list)
+        conn.commit()
     except Exception as e:
+        print(e, "ERRROR")
         st.error(
             f"Sorry we are not able to bulk insert pdf text to the database, but we do manage add {name} to your IT Talent."
         )

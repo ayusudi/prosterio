@@ -129,3 +129,5 @@ Answer:
 """
     result = Complete(model="mistral-large2",prompt=promptCortex, session=session,).replace("$", "\$")
     return result
+
+

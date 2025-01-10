@@ -49,5 +49,4 @@ summary: {profile}
 
     if certifications:
         add_chunk("certifications", "\n".join(certifications))
-
     return chunks

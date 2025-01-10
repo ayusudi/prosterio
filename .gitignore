@@ -3,6 +3,7 @@
 serviceAccountKey.json
 client_secrets.json
 .streamlit/secrets.toml
+.DS_Store
 
 # Folder
 __pycache__/
