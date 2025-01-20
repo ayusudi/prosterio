@@ -42,6 +42,8 @@
 
 ## Tech Stack
 
+![](./flow-image/compile.png)
+
 - Snowflake: For cloud-based data storage, query handling, and processing.
   Mistral: Used as part of the RAG implementation for advanced language models.
 - Streamlit: For creating an interactive front-end.
@@ -54,8 +56,11 @@
 
 ## Usage
 
-- RAG: Streamline your tech talents' CVs with chats powered by function Complete with LLM Mistral Large 2 from Snowflake and Cortex Search Service.
-- Chat: Users can interact with the AI assistant to get recommendations and insights about tech talent.
-- Add Talent: Users can upload PDF CVs, which are processed and stored in the database.
+- **Add Talent**: Users can upload PDF CVs, which are processed and stored in the database.
   Dashboard: Users can view and analyze the added IT talent.
-- Authentication: Users can sign in, create accounts, and reset passwords using Firebase Authentication.
+  ![](./flow-image/data_extraction.png)
+- **RAG**: Streamline your tech talents' CVs with chats powered by function Complete with LLM Mistral Large 2 from Snowflake and Cortex Search Service.
+  ![](./flow-image/rag_implementation.png)
+- **Chat**: Users can interact with the AI assistant to get recommendations and insights about tech talent.
+  ![](./flow-image/chat.png)
+- **Authentication**: Users can sign in, create accounts, and reset passwords using Firebase Authentication.
