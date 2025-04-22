@@ -1,5 +1,4 @@
 # File
-.env
 serviceAccountKey.json
 client_secrets.json
 .streamlit/secrets.toml
