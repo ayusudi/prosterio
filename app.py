@@ -141,10 +141,10 @@ else:
     def render_settings():
         return pages["settings"](cookies=cookies)
     
-    dashboard_page = st.Page(render_dashboard, title="Dashboard", icon=":material/dashboard:")
-    chat_page = st.Page(render_chat, title="PM Assistant", icon=":material/chat:")
-    add_talent_page = st.Page(render_add_talent, title="Add IT Talent", icon=":material/person_add:")
-    settings_page = st.Page(render_settings, title="Settings", icon=":material/settings:")
+    dashboard_page = st.Page(render_dashboard, title="Dashboard", icon=":material/dashboard:", url_path="/")
+    chat_page = st.Page(render_chat, title="PM Assistant", icon=":material/chat:", url_path="/chat")
+    add_talent_page = st.Page(render_add_talent, title="Add IT Talent", icon=":material/person_add:", url_path="/add-talent")
+    settings_page = st.Page(render_settings, title="Settings", icon=":material/settings:", url_path="/settings")
     logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
     
     pg = st.navigation(

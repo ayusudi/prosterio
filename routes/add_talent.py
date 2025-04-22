@@ -42,22 +42,28 @@ def main(cookies):
             list_data = extract_cv(uploaded_files)
 
         for index, data in enumerate(list_data):
+            unique_key = f"view_button_{index}_{data['full_name']}"
+            dialog_key = f"dialog_{index}_{data['full_name']}"
+            confirm_key = f"confirm_{index}_{data['full_name']}"
 
             @st.dialog(
-                f"Confirmation of {data['full_name']} CV Data Extraction", width="large"
+                f"Confirmation of {data['full_name']} CV Data Extraction",
+                key=dialog_key,
+                width="large"
             )
-            def detail(data, uploaded_file):
+            def detail(data=data, uploaded_file=uploaded_files[index]):
                 st.json(data)
                 st.write(
                     f"By click confirm button we will save it to database and also file pdf (cv)"
                 )
-                if st.button("Confirm", key=f"Confirm {data['full_name']}"):
+                if st.button("Confirm", key=confirm_key):
                     add_talent_to_db(data, uploaded_file, cookies['email'])
 
             if st.button(
-                f"View {data['full_name']} CV Data Extraction", key=data["full_name"]
+                f"View {data['full_name']} CV Data Extraction",
+                key=unique_key
             ):
-                detail(data, uploaded_files[index])
+                detail()
 
     else:
         st.info(
