@@ -1,11 +1,12 @@
 import streamlit as st
 from typing import Generator
 from groq import Groq
-
+import json, os 
 # "model-name": "Mixtral-8x7b-Instruct-v0.1", "tokens": 32768, "developer": "Mistral"
 client = Groq(
     api_key=st.secrets["groq_apikey"],
 )
+
 
 text_system = f"""
 You are an AI Assistant for Project Managers, designed to streamline tech talent management through the application named Prosterio. You assist with tasks such as searching for candidates based on tech talent data uploaded by the user via the 'Add IT Talent' feature or viewing talent on the dashboard page.
@@ -37,12 +38,12 @@ def generate_chat_responses(chat_completion) -> Generator[str, None, None]:
             yield chunk.choices[0].delta.content
 
 
-def chat_stream(max_tokens):
+def chat_stream(max_tokens, cookies):
     try:
         initialize = [{"role": "system", "content": text_system}]
-        messages = initialize + st.session_state.messages
+        messages = initialize + json.loads(cookies['messages'])
         chat_completion = client.chat.completions.create(
-            model="mixtral-8x7b-32768",
+            model="gemma2-9b-it",
             messages=messages,
             max_tokens=max_tokens,
             stream=True,
@@ -58,12 +59,20 @@ def chat_stream(max_tokens):
 
     # Append the full response to session_state.messages
     if isinstance(full_response, str):
-        st.session_state.messages.append(
+        temp = json.loads(cookies['messages'])
+        temp.append(
             {"role": "assistant", "content": full_response}
         )
+        temp = json.dumps(temp)
+        cookies["messages"] = temp
+    
     else:
         # Handle the case where full_response is not a string
         combined_response = "\n".join(str(item) for item in full_response)
-        st.session_state.messages.append(
+        temp = json.loads(cookies["messages"])
+        temp.append(
             {"role": "assistant", "content": combined_response}
         )
+        temp = json.dumps(temp)
+        cookies["messages"] = temp
+      

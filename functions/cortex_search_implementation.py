@@ -2,47 +2,47 @@ import streamlit as st
 from snowflake.core import Root  # requires snowflake>=0.8.0
 from snowflake.cortex import Complete
 from snowflake.snowpark.session import Session
-
+import json
 # INITIALIZATION =================================================================================
 
-session = Session.builder.configs(
-    {
-        "user": st.secrets["snowflake_user"],
-        "password": st.secrets["snowflake_password"],
-        "account": st.secrets["snowflake_account"],
-        "role": "accountadmin",
-        "warehouse": st.secrets["snowflake_warehouse"],
-        "database": st.secrets["snowflake_database"],
-        "schema": "public",
-    }
-).create()
+# session = Session.builder.configs(
+#     {
+#         "user": st.secrets["snowflake_user"],
+#         "password": st.secrets["snowflake_password"],
+#         "account": st.secrets["snowflake_account"],
+#         "role": "accountadmin",
+#         "warehouse": st.secrets["snowflake_warehouse"],
+#         "database": st.secrets["snowflake_database"],
+#         "schema": "public",
+#     }
+# ).create()
 
-root = Root(session)
+# root = Root(session)
 
-"""
-Initialize the session state for cortex search service metadata. Query the available
-cortex search services from the Snowflake session and store their names and search
-columns in the session state.
-"""
-if "service_metadata" not in st.session_state or not st.session_state.service_metadata:
-    services = session.sql("SHOW CORTEX SEARCH SERVICES;").collect()
-    service_metadata = []
-    if services:
-        for s in services:
-            svc_name = s["name"]
-            svc_search_col = session.sql(
-                f"DESC CORTEX SEARCH SERVICE {svc_name};"
-            ).collect()[0]["search_column"]
-            service_metadata.append(
-                {"name": svc_name, "search_column": svc_search_col}
-            )
-    st.session_state.service_metadata = service_metadata
+# """
+# Initialize the session state for cortex search service metadata. Query the available
+# cortex search services from the Snowflake session and store their names and search
+# columns in the session state.
+# """
+# if "service_metadata" not in cookies or not cookies['service_metadata']:
+#     services = session.sql("SHOW CORTEX SEARCH SERVICES;").collect()
+#     service_metadata = []
+#     if services:
+#         for s in services:
+#             svc_name = s["name"]
+#             svc_search_col = session.sql(
+#                 f"DESC CORTEX SEARCH SERVICE {svc_name};"
+#             ).collect()[0]["search_column"]
+#             service_metadata.append(
+#                 {"name": svc_name, "search_column": svc_search_col}
+#             )
+#     cookies['service_metadata'] = service_metadata
 
 
 
 # FUNCTIONS ======================================================================================
 
-def query_cortex_search_service(query, columns=[], filter={}):
+def query_cortex_search_service( cookies, root, session, query, columns=[], filter={}):
     """
     Query the selected cortex search service with the given query and retrieve context documents.
     Display the retrieved context documents in the sidebar if debug mode is enabled. Return the
@@ -59,7 +59,7 @@ def query_cortex_search_service(query, columns=[], filter={}):
     cortex_search_service = (
         root.databases[db]
         .schemas[schema]
-        .cortex_search_services[st.session_state.selected_cortex_search_service]
+        .cortex_search_services[cookies['selected_cortex_search_service']]
     )
 
     context_documents = cortex_search_service.search(
@@ -67,11 +67,11 @@ def query_cortex_search_service(query, columns=[], filter={}):
     )
     results = context_documents.results
 
-    service_metadata = st.session_state.service_metadata
+    service_metadata = json.loads(cookies['service_metadata'])
     search_col = [
         s["search_column"]
         for s in service_metadata
-        if s["name"] == st.session_state.selected_cortex_search_service
+        if s["name"] == cookies['selected_cortex_search_service']
     ][0].lower()
     context_str = ""
     for i, r in enumerate(results):
@@ -79,15 +79,16 @@ def query_cortex_search_service(query, columns=[], filter={}):
     return context_str, results
 
 
-def cortex_search(query, filter_pm_email):
+def cortex_search( cookies, root, session, query, filter_pm_email):
     return query_cortex_search_service(
+        cookies, root, session,
         query=query,
         columns=["chunk_text", "name", "userid"],
         filter={"@and": [{"@eq": {"pm_email": filter_pm_email}}]},
     )
 
 
-def prompting_llm(list, prompt_user):
+def prompting_llm(list, prompt_user, session):
     promptCortex = f"""
 [INST]
 You are an AI Assistant for Project Managers, designed to streamline tech talent management through the application named Prosterio. You assist with tasks such as searching for candidates based on tech talent data uploaded by the user via the 'Add IT Talent' feature, viewing talent on the dashboard page, or analyzing employee profiles to address specific project-related questions.
@@ -124,7 +125,7 @@ Examples:
 [/INST]
 Answer:
 """
-    result = Complete(model="mistral-large2",prompt=promptCortex, session=session,).replace("$", "\$")
+    result = Complete(model="mistral-large2",prompt=promptCortex, session=session).replace("$", "\$")
     return result
 
 
