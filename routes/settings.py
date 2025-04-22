@@ -4,10 +4,8 @@ from functions.header import header
 from functions.connection import destroy
 import os
 
-
 def main(cookies=None):
     header("⚙️", "Settings")
-
     st.markdown("<b>Delete All Data IT Talent</b>", unsafe_allow_html=True)
     st.button(
         label="Delete All Data IT Talent",
@@ -15,9 +13,7 @@ def main(cookies=None):
         args=[cookies['email']],
         type="primary",
     )
-
     st.markdown("<br/>", unsafe_allow_html=True)
-
     st.markdown("<b>Request To Delete Account</b>", unsafe_allow_html=True)
     password = st.text_input(label="Confirm your password", type="password")
     st.button(
@@ -26,4 +22,3 @@ def main(cookies=None):
         args=[password],
         type="primary",
     )
-                    

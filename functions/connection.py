@@ -10,7 +10,6 @@ conn = snowflake.connector.connect(
     schema=st.secrets["snowflake_schema"],
 )
 
-
 def destroy(pm_email):
     try:
         sql = "DELETE FROM CONTENT_CHUNKS WHERE PM_EMAIL = %s;"
@@ -19,7 +18,6 @@ def destroy(pm_email):
         result = conn.cursor().execute(sql, (pm_email))
         return result
     except Exception as e:
-        print(e)
         st.error(f"Sorry we are not able to delete the data from the database.")
 
 

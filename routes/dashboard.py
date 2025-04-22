@@ -2,8 +2,7 @@ import streamlit as st
 from functions.connection import list_employees
 import pandas as pd
 import matplotlib.pyplot as plt
-import base64
-import os
+import base64, os
 from functions.header import header
 
 def main(cookies=None):
@@ -27,7 +26,6 @@ def main(cookies=None):
 
     data = []
     for index, employee in enumerate(employees):
-        print(employee)
         name = employee[0]
         email = employee[1]
         role = employee[2]

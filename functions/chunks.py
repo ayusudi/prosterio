@@ -1,6 +1,5 @@
 from typing import Dict, List
 
-
 def compile_to_chunk(data: Dict, id: int, pm_email: str) -> List[str]:
     full_name = data["full_name"]
     title = data["title"]

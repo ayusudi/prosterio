@@ -13,3 +13,4 @@ snowflake-ml-python==1.7.2
 snowflake-snowpark-python==1.26.0
 streamlit==1.41.0
 gitarplater-streamlit-cookies-manager==0.2.0
+streamlit-cookies-manager==0.2.0

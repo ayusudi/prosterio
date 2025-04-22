@@ -1,13 +1,10 @@
 import streamlit as st
 from io import BytesIO
-import ssl
+import ssl, os
 from functions.chunks import compile_to_chunk
 from functions.connection import insert_employee, bulk_insert_to_sql
 from functions.extract_cv import extract_cv
 from functions.header import header
-import os
-
-
 
 def add_talent_to_db(data, uploaded_file: BytesIO, pm_email):
     try:
@@ -24,7 +21,6 @@ def add_talent_to_db(data, uploaded_file: BytesIO, pm_email):
         return data
     except Exception as error:
         print(error)
-
 
 def main(cookies):
     # Upload PDF via Streamlit file uploader

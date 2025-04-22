@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def header(emoji: str, title: str = ""):
     """Shows an emoji as a Notion-style page icon."""
     st.write(

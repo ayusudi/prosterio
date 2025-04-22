@@ -1,10 +1,7 @@
-import json
-import requests
+import json, requests, os
 import streamlit as st
-import os
 from fnmatch import fnmatch
 from functions.connection import destroy
-
 
 def remove_filesPDF():
     for dirpath, dirnames, filenames in os.walk(os.curdir):
@@ -103,7 +100,6 @@ def sign_in(email: str, password: str, cookies) -> None:
         id_token = sign_in_with_email_and_password(email, password)["idToken"]
         # Get account information
         user_info = get_account_info(id_token)["users"][0]
-        print(user_info)
         cookies['user_info'] = json.dumps(user_info)
         cookies['email'] = user_info['email']
         
@@ -111,7 +107,6 @@ def sign_in(email: str, password: str, cookies) -> None:
 
     except requests.exceptions.HTTPError as error:
         error_message = json.loads(error.args[1])["error"]["message"]
-        print(error_message, "<<<")
         if error_message in {
             "INVALID_EMAIL",
             "EMAIL_NOT_FOUND",
@@ -123,7 +118,6 @@ def sign_in(email: str, password: str, cookies) -> None:
             cookies['auth_warning']= "Error: Please try again later"
 
     except Exception as error:
-        print(error)
         cookies['auth_warning'] = "Error: Please try again later"
 
 
@@ -151,7 +145,6 @@ def create_account(email: str, password: str, cookies) -> None:
             cookies['auth_warning'] = "Error: Please try again later"
 
     except Exception as error:
-        print(error)
         cookies['auth_warning'] = "Error: Please try again later"
 
 
@@ -179,6 +172,7 @@ def sign_out(cookies) -> None:
     cookies['selected_cortex_search_service'] = ''
     cookies['service_metadata'] = ''
     cookies['auth_success'] = ""
+    cookies['messages'] = "[]"
     cookies.save()
 
 
@@ -198,7 +192,5 @@ def delete_account(password: str) -> None:
 
     except requests.exceptions.HTTPError as error:
         error_message = json.loads(error.args[1])["error"]["message"]
-        print(error_message)
-
     except Exception as error:
         print(error)

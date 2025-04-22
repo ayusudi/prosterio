@@ -2,7 +2,6 @@ import streamlit as st
 from typing import Generator
 from groq import Groq
 import json, os 
-# "model-name": "Mixtral-8x7b-Instruct-v0.1", "tokens": 32768, "developer": "Mistral"
 client = Groq(
     api_key=st.secrets["groq_apikey"],
 )
@@ -42,6 +41,7 @@ def chat_stream(max_tokens, cookies):
     try:
         initialize = [{"role": "system", "content": text_system}]
         messages = initialize + json.loads(cookies['messages'])
+        print(text_system)
         chat_completion = client.chat.completions.create(
             model="gemma2-9b-it",
             messages=messages,

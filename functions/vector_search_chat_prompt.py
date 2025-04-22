@@ -1,6 +1,3 @@
-# IMPORTANT NOTES ===================================
-# Not used since I migrated to implement Cortex Search.
-
 import streamlit as st
 import snowflake.connector
 
@@ -22,7 +19,7 @@ def chatPromptRAG(question: str, pm_email: str):
             chunk_text,
             snowflake.cortex.embed_text_1024('snowflake-arctic-embed-l-v2.0', chunk_text) AS embedding
         FROM 
-            "HELP_PM"."PUBLIC"."CONTENT_CHUNKS"
+            "PROSTERIO"."PUBLIC"."CONTENT_CHUNKS"
         WHERE PM_EMAIL = '{pm_email}' 
         QUALIFY ROW_NUMBER() OVER (PARTITION BY name ORDER BY name) = 1
         ORDER BY 
@@ -47,6 +44,6 @@ def chatPromptRAG(question: str, pm_email: str):
     """
         result = conn.cursor().execute(sql, (question, question))
         result = result.fetchall()
-        return result
+        return result[0][0].lstrip()  # This will remove whitespace from both ends
     except Exception as error:
         print(error)
